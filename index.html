@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UTM Tag Generator - Easy Link Tracking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .info-bubble {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            border: none;
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+            color: #555;
+            border-left: 4px solid #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e6ed;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-group input::placeholder {
+            color: #999;
+        }
+
+        .help-text {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .generate-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin: 30px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .generate-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .result-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+            border: 2px solid #e9ecef;
+            display: none;
+            position: relative;
+        }
+
+        .result-container.show {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .result-url {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            word-break: break-all;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #495057;
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+        }
+
+        .copy-btn:hover {
+            background: #5a67d8;
+            transform: scale(1.05);
+        }
+
+        .copy-btn.copied {
+            background: #48bb78;
+            transform: scale(1.1);
+        }
+
+        .preset-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .preset-btn {
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .preset-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .clear-btn {
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .clear-btn:hover {
+            background: #ff5252;
+            transform: translateY(-2px);
+        }
+
+        .tips-section {
+            margin-top: 40px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .tips-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .tips-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .tips-section li {
+            padding: 8px 0;
+            color: #555;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .tips-section li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+                margin: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .preset-buttons {
+                justify-content: center;
+            }
+
+            .copy-btn {
+                position: static;
+                margin-top: 10px;
+                width: 100%;
+            }
+        }
+
+        .validation-error {
+            color: #e74c3c;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-group.error input {
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        .form-group.error .validation-error {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 UTM Tag Generator</h1>
+            <p>Create professional tracking links in seconds - no technical knowledge required!</p>
+            <div class="info-bubble">
+                💡 UTM tags help you track where your website visitors come from. Just fill in the form below and get a trackable link instantly!
+            </div>
+        </div>
+
+        <form id="utmForm">
+            <div class="form-group">
+                <label for="url">Website URL <span class="required">*</span></label>
+                <input type="url" id="url" placeholder="https://yourwebsite.com" required>
+                <div class="help-text">The full URL of the page you want to track</div>
+                <div class="validation-error">Please enter a valid URL (must start with http:// or https://)</div>
+            </div>
+
+            <div class="form-group">
+                <label for="source">Traffic Source <span class="required">*</span></label>
+                <div class="preset-buttons">
+                    <button type="button" class="preset-btn" data-field="source" data-value="google">Google</button>
+                    <button type="button" class="preset-btn" data-field="source" data-value="facebook">Facebook</button>
+                    <button type="button" class="preset-btn" data-field="source" data-value="instagram">Instagram</button>
+                    <button type="button" class="preset-btn" data-field="source" data-value="twitter">Twitter</button>
+                    <button type="button" class="preset-btn" data-field="source" data-value="linkedin">LinkedIn</button>
+                    <button type="button" class="preset-btn" data-field="source" data-value="email">Email</button>
+                </div>
+                <input type="text" id="source" placeholder="e.g., google, facebook, newsletter" required>
+                <div class="help-text">Where is the traffic coming from? (use lowercase, no spaces)</div>
+                <div class="validation-error">Source is required and should be lowercase with no spaces</div>
+            </div>
+
+            <div class="form-group">
+                <label for="medium">Marketing Medium <span class="required">*</span></label>
+                <div class="preset-buttons">
+                    <button type="button" class="preset-btn" data-field="medium" data-value="cpc">Paid Search</button>
+                    <button type="button" class="preset-btn" data-field="medium" data-value="social">Social Media</button>
+                    <button type="button" class="preset-btn" data-field="medium" data-value="email">Email</button>
+                    <button type="button" class="preset-btn" data-field="medium" data-value="referral">Referral</button>
+                    <button type="button" class="preset-btn" data-field="medium" data-value="display">Display Ads</button>
+                </div>
+                <input type="text" id="medium" placeholder="e.g., cpc, social, email, referral" required>
+                <div class="help-text">How are you marketing? (paid ads, social posts, email, etc.)</div>
+                <div class="validation-error">Medium is required and should be lowercase with no spaces</div>
+            </div>
+
+            <div class="form-group">
+                <label for="campaign">Campaign Name <span class="required">*</span></label>
+                <input type="text" id="campaign" placeholder="e.g., summer_sale_2025, product_launch" required>
+                <div class="help-text">Name of your marketing campaign (use underscores instead of spaces)</div>
+                <div class="validation-error">Campaign name is required</div>
+            </div>
+
+            <div class="form-group">
+                <label for="term">Keyword/Term (Optional)</label>
+                <input type="text" id="term" placeholder="e.g., running_shoes, best_laptop">
+                <div class="help-text">For paid search, what keywords are you targeting?</div>
+            </div>
+
+            <div class="form-group">
+                <label for="content">Ad Content (Optional)</label>
+                <input type="text" id="content" placeholder="e.g., banner_ad, text_link, video_ad">
+                <div class="help-text">Helps differentiate similar ads (useful for A/B testing)</div>
+            </div>
+
+            <button type="submit" class="generate-btn">🚀 Generate UTM Link</button>
+            <button type="button" class="clear-btn" onclick="clearForm()">🗑️ Clear All</button>
+        </form>
+
+        <div id="resultContainer" class="result-container">
+            <div class="result-label">✨ Your UTM-tagged URL is ready:</div>
+            <div class="result-url" id="resultUrl">
+                <button class="copy-btn" onclick="copyToClipboard()">📋 Copy</button>
+                <span id="urlDisplay"></span>
+            </div>
+
+            <div style="margin-top: 20px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px;">
+                <strong>💡 Pro Tip:</strong> Use this link in your marketing campaigns. You'll be able to see exactly how many visitors came from this specific source in Google Analytics!
+            </div>
+        </div>
+
+        <div class="tips-section">
+            <h3>🎓 Quick Tips for Better Tracking</h3>
+            <ul>
+                <li>Always use lowercase letters to avoid tracking issues</li>
+                <li>Use underscores or hyphens instead of spaces</li>
+                <li>Keep names short and descriptive</li>
+                <li>Be consistent with your naming across campaigns</li>
+                <li>Test your links before launching campaigns</li>
+                <li>Source identifies WHERE traffic comes from (google, facebook)</li>
+                <li>Medium identifies HOW you're marketing (social, email, cpc)</li>
+                <li>Campaign identifies WHAT you're promoting (summer_sale, product_launch)</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Preset button functionality
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const field = btn.dataset.field;
+                const value = btn.dataset.value;
+                document.getElementById(field).value = value;
+
+                // Add visual feedback
+                btn.style.background = '#667eea';
+                btn.style.color = 'white';
+                setTimeout(() => {
+                    btn.style.background = 'rgba(102, 126, 234, 0.1)';
+                    btn.style.color = '#667eea';
+                }, 200);
+            });
+        });
+
+        // Form validation and submission
+        document.getElementById('utmForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Clear previous errors
+            document.querySelectorAll('.form-group').forEach(group => {
+                group.classList.remove('error');
+            });
+
+            const url = document.getElementById('url').value.trim();
+            const source = document.getElementById('source').value.trim();
+            const medium = document.getElementById('medium').value.trim();
+            const campaign = document.getElementById('campaign').value.trim();
+            const term = document.getElementById('term').value.trim();
+            const content = document.getElementById('content').value.trim();
+
+            let hasErrors = false;
+
+            // Validate URL
+            if (!url || !isValidUrl(url)) {
+                showError('url');
+                hasErrors = true;
+            }
+
+            // Validate source
+            if (!source || hasSpacesOrCaps(source)) {
+                showError('source');
+                hasErrors = true;
+            }
+
+            // Validate medium
+            if (!medium || hasSpacesOrCaps(medium)) {
+                showError('medium');
+                hasErrors = true;
+            }
+
+            // Validate campaign
+            if (!campaign) {
+                showError('campaign');
+                hasErrors = true;
+            }
+
+            if (hasErrors) return;
+
+            // Generate UTM URL
+            const utmUrl = generateUTMUrl(url, source, medium, campaign, term, content);
+            displayResult(utmUrl);
+        });
+
+        function isValidUrl(string) {
+            try {
+                new URL(string);
+                return string.startsWith('http://') || string.startsWith('https://');
+            } catch (_) {
+                return false;
+            }
+        }
+
+        function hasSpacesOrCaps(str) {
+            return /\s/.test(str) || str !== str.toLowerCase();
+        }
+
+        function showError(fieldId) {
+            const formGroup = document.getElementById(fieldId).closest('.form-group');
+            formGroup.classList.add('error');
+        }
+
+        function generateUTMUrl(baseUrl, source, medium, campaign, term, content) {
+            const url = new URL(baseUrl);
+
+            // Add UTM parameters
+            url.searchParams.set('utm_source', source.toLowerCase());
+            url.searchParams.set('utm_medium', medium.toLowerCase());
+            url.searchParams.set('utm_campaign', campaign.toLowerCase().replace(/\s+/g, '_'));
+
+            if (term) {
+                url.searchParams.set('utm_term', term.toLowerCase().replace(/\s+/g, '_'));
+            }
+
+            if (content) {
+                url.searchParams.set('utm_content', content.toLowerCase().replace(/\s+/g, '_'));
+            }
+
+            return url.toString();
+        }
+
+        function displayResult(url) {
+            document.getElementById('urlDisplay').textContent = url;
+            const container = document.getElementById('resultContainer');
+            container.classList.add('show');
+            container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        async function copyToClipboard() {
+            const url = document.getElementById('urlDisplay').textContent;
+            const btn = document.querySelector('.copy-btn');
+
+            try {
+                await navigator.clipboard.writeText(url);
+                btn.textContent = '✅ Copied!';
+                btn.classList.add('copied');
+
+                setTimeout(() => {
+                    btn.textContent = '📋 Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = url;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+
+                btn.textContent = '✅ Copied!';
+                btn.classList.add('copied');
+
+                setTimeout(() => {
+                    btn.textContent = '📋 Copy';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('utmForm').reset();
+            document.getElementById('resultContainer').classList.remove('show');
+            document.querySelectorAll('.form-group').forEach(group => {
+                group.classList.remove('error');
+            });
+        }
+
+        // Auto-fix common issues
+        document.getElementById('source').addEventListener('input', autoFix);
+        document.getElementById('medium').addEventListener('input', autoFix);
+        document.getElementById('campaign').addEventListener('input', autoFix);
+        document.getElementById('term').addEventListener('input', autoFix);
+        document.getElementById('content').addEventListener('input', autoFix);
+
+        function autoFix(e) {
+            // Convert to lowercase and replace spaces with underscores
+            let value = e.target.value.toLowerCase().replace(/\s+/g, '_');
+            // Remove special characters except underscores and hyphens
+            value = value.replace(/[^a-z0-9_-]/g, '');
+            e.target.value = value;
+        }
+
+        // Add URL auto-fix
+        document.getElementById('url').addEventListener('blur', (e) => {
+            let url = e.target.value.trim();
+            if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+                e.target.value = url;
+            }
+        });
+    </script>
+</body>
+</html>
