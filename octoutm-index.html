@@ -176,12 +176,14 @@
             background: white;
             border: 2px solid #dee2e6;
             border-radius: 8px;
-            padding: 15px;
+            padding: 15px 60px 15px 15px;
             word-break: break-all;
             font-family: 'Courier New', monospace;
             font-size: 0.9rem;
             color: #495057;
             position: relative;
+            line-height: 1.5;
+            overflow-wrap: break-word;
         }
 
         .copy-btn {
@@ -303,6 +305,11 @@
                 margin-top: 10px;
                 width: 100%;
             }
+
+            .result-url {
+                padding: 15px;
+                font-size: 0.8rem;
+            }
         }
 
         .validation-error {
@@ -344,11 +351,11 @@
                 <label for="source">Traffic Source <span class="required">*</span></label>
                 <div class="preset-buttons">
                     <button type="button" class="preset-btn" data-field="source" data-value="google">Google</button>
-                    <button type="button" class="preset-btn" data-field="source" data-value="facebook">Facebook</button>
                     <button type="button" class="preset-btn" data-field="source" data-value="instagram">Instagram</button>
-                    <button type="button" class="preset-btn" data-field="source" data-value="twitter">Twitter</button>
-                    <button type="button" class="preset-btn" data-field="source" data-value="linkedin">LinkedIn</button>
+                    <button type="button" class="preset-btn" data-field="source" data-value="tiktok">TikTok</button>
                     <button type="button" class="preset-btn" data-field="source" data-value="email">Email</button>
+                    <button type="button" class="preset-btn" data-field="source" data-value="facebook">Facebook</button>
+                    <button type="button" class="preset-btn" data-field="source" data-value="twitter">Twitter</button>
                 </div>
                 <input type="text" id="source" placeholder="e.g., google, facebook, newsletter" required>
                 <div class="help-text">Where is the traffic coming from? (use lowercase, no spaces)</div>
@@ -359,10 +366,10 @@
                 <label for="medium">Marketing Medium <span class="required">*</span></label>
                 <div class="preset-buttons">
                     <button type="button" class="preset-btn" data-field="medium" data-value="cpc">Paid Search</button>
-                    <button type="button" class="preset-btn" data-field="medium" data-value="social">Social Media</button>
+                    <button type="button" class="preset-btn" data-field="medium" data-value="social">Social Media any</button>
                     <button type="button" class="preset-btn" data-field="medium" data-value="email">Email</button>
-                    <button type="button" class="preset-btn" data-field="medium" data-value="referral">Referral</button>
-                    <button type="button" class="preset-btn" data-field="medium" data-value="display">Display Ads</button>
+                    <button type="button" class="preset-btn" data-field="medium" data-value="referral">Reels</button>
+                    <button type="button" class="preset-btn" data-field="medium" data-value="display">Story</button>
                 </div>
                 <input type="text" id="medium" placeholder="e.g., cpc, social, email, referral" required>
                 <div class="help-text">How are you marketing? (paid ads, social posts, email, etc.)</div>
@@ -398,7 +405,7 @@
                 <button class="copy-btn" onclick="copyToClipboard()">📋 Copy</button>
                 <span id="urlDisplay"></span>
             </div>
-
+            
             <div style="margin-top: 20px; padding: 15px; background: rgba(102, 126, 234, 0.1); border-radius: 10px;">
                 <strong>💡 Pro Tip:</strong> Use this link in your marketing campaigns. You'll be able to see exactly how many visitors came from this specific source in Google Analytics!
             </div>
@@ -427,7 +434,7 @@
                 const field = btn.dataset.field;
                 const value = btn.dataset.value;
                 document.getElementById(field).value = value;
-
+                
                 // Add visual feedback
                 btn.style.background = '#667eea';
                 btn.style.color = 'white';
@@ -441,7 +448,7 @@
         // Form validation and submission
         document.getElementById('utmForm').addEventListener('submit', (e) => {
             e.preventDefault();
-
+            
             // Clear previous errors
             document.querySelectorAll('.form-group').forEach(group => {
                 group.classList.remove('error');
@@ -507,16 +514,16 @@
 
         function generateUTMUrl(baseUrl, source, medium, campaign, term, content) {
             const url = new URL(baseUrl);
-
+            
             // Add UTM parameters
             url.searchParams.set('utm_source', source.toLowerCase());
             url.searchParams.set('utm_medium', medium.toLowerCase());
             url.searchParams.set('utm_campaign', campaign.toLowerCase().replace(/\s+/g, '_'));
-
+            
             if (term) {
                 url.searchParams.set('utm_term', term.toLowerCase().replace(/\s+/g, '_'));
             }
-
+            
             if (content) {
                 url.searchParams.set('utm_content', content.toLowerCase().replace(/\s+/g, '_'));
             }
@@ -528,18 +535,22 @@
             document.getElementById('urlDisplay').textContent = url;
             const container = document.getElementById('resultContainer');
             container.classList.add('show');
-            container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            // Smooth scroll with a slight delay to ensure the container is visible
+            setTimeout(() => {
+                container.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
         }
 
         async function copyToClipboard() {
             const url = document.getElementById('urlDisplay').textContent;
             const btn = document.querySelector('.copy-btn');
-
+            
             try {
                 await navigator.clipboard.writeText(url);
                 btn.textContent = '✅ Copied!';
                 btn.classList.add('copied');
-
+                
                 setTimeout(() => {
                     btn.textContent = '📋 Copy';
                     btn.classList.remove('copied');
@@ -552,10 +563,10 @@
                 textArea.select();
                 document.execCommand('copy');
                 document.body.removeChild(textArea);
-
+                
                 btn.textContent = '✅ Copied!';
                 btn.classList.add('copied');
-
+                
                 setTimeout(() => {
                     btn.textContent = '📋 Copy';
                     btn.classList.remove('copied');
