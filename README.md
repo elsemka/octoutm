@@ -6,7 +6,7 @@ A beautiful, user-friendly web tool that helps anyone create UTM tracking parame
 
 ## 🚀 Live Demo
 
-**[Try the tool here →](https://yourusername.github.io/octoutm)**
+**[Try the tool here →](https://elsemka.github.io/octoutm)**
 
 ## ✨ Features
 
@@ -228,8 +228,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Support
 
-- **Issues**: [Report bugs or request features](https://github.com/yourusername/octoutm/issues)
-- **Discussions**: [Ask questions or share ideas](https://github.com/yourusername/octoutm/discussions)
+- **Issues**: [Report bugs or request features](https://github.com/elsemka/octoutm/issues)
+- **Discussions**: [Ask questions or share ideas](https://github.com/elsemka/octoutm/discussions)
 - **Email**: your.email@example.com
 
 ---
