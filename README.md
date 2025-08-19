@@ -6,7 +6,7 @@ A beautiful, user-friendly web tool that helps anyone create UTM tracking parame
 
 ## 🚀 Live Demo
 
-**[Try the tool here →](https://elsemka.github.io/octoutm)**
+**[Try the tool by downloading file →](https://github.com/elsemka/octoutm/blob/main/octoutm-index.html)**
 
 ## ✨ Features
 
