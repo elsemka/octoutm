@@ -179,11 +179,13 @@
             padding: 15px 60px 15px 15px;
             word-break: break-all;
             font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            color: #495057;
+            font-size: 1rem;
+            color: #2d3748;
+            font-weight: 600;
             position: relative;
             line-height: 1.5;
             overflow-wrap: break-word;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);
         }
 
         .copy-btn {
@@ -308,7 +310,7 @@
 
             .result-url {
                 padding: 15px;
-                font-size: 0.8rem;
+                font-size: 0.9rem;
             }
         }
 
@@ -351,11 +353,11 @@
                 <label for="source">Traffic Source <span class="required">*</span></label>
                 <div class="preset-buttons">
                     <button type="button" class="preset-btn" data-field="source" data-value="google">Google</button>
-                    <button type="button" class="preset-btn" data-field="source" data-value="instagram">Instagram</button>
-                    <button type="button" class="preset-btn" data-field="source" data-value="tiktok">TikTok</button>
-                    <button type="button" class="preset-btn" data-field="source" data-value="email">Email</button>
                     <button type="button" class="preset-btn" data-field="source" data-value="facebook">Facebook</button>
+                    <button type="button" class="preset-btn" data-field="source" data-value="instagram">Instagram</button>
                     <button type="button" class="preset-btn" data-field="source" data-value="twitter">Twitter</button>
+                    <button type="button" class="preset-btn" data-field="source" data-value="linkedin">LinkedIn</button>
+                    <button type="button" class="preset-btn" data-field="source" data-value="email">Email</button>
                 </div>
                 <input type="text" id="source" placeholder="e.g., google, facebook, newsletter" required>
                 <div class="help-text">Where is the traffic coming from? (use lowercase, no spaces)</div>
@@ -366,10 +368,12 @@
                 <label for="medium">Marketing Medium <span class="required">*</span></label>
                 <div class="preset-buttons">
                     <button type="button" class="preset-btn" data-field="medium" data-value="cpc">Paid Search</button>
-                    <button type="button" class="preset-btn" data-field="medium" data-value="social">Social Media any</button>
+                    <button type="button" class="preset-btn" data-field="medium" data-value="social">Social Media</button>
+                    <button type="button" class="preset-btn" data-field="medium" data-value="social">Reels</button>
+                    <button type="button" class="preset-btn" data-field="medium" data-value="social">Story</button>
                     <button type="button" class="preset-btn" data-field="medium" data-value="email">Email</button>
-                    <button type="button" class="preset-btn" data-field="medium" data-value="referral">Reels</button>
-                    <button type="button" class="preset-btn" data-field="medium" data-value="display">Story</button>
+                    <button type="button" class="preset-btn" data-field="medium" data-value="referral">Referral</button>
+                    <button type="button" class="preset-btn" data-field="medium" data-value="display">Display Ads</button>
                 </div>
                 <input type="text" id="medium" placeholder="e.g., cpc, social, email, referral" required>
                 <div class="help-text">How are you marketing? (paid ads, social posts, email, etc.)</div>
